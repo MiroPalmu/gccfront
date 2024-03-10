@@ -145,7 +145,7 @@ static struct deferred_opt
 
 
 extern const unsigned int 
-c_family_lang_mask = (CL_C | CL_CXX | CL_ObjC | CL_ObjCXX);
+c_family_lang_mask = (CL_C | CL_CXX | CL_ObjC | CL_ObjCXX | CL_CXX2);
 
 /* Defer option CODE with argument ARG.  */
 static void
@@ -160,9 +160,21 @@ defer_opt (enum opt_code code, const char *arg)
 unsigned int
 c_common_option_lang_mask (void)
 {
-  static const unsigned int lang_flags[] = {CL_C, CL_ObjC, CL_CXX, CL_ObjCXX};
-
-  return lang_flags[c_language];
+  switch (c_language)
+    {
+    case clk_c:
+      return CL_C;
+    case clk_objc:
+      return CL_ObjC;
+    case clk_cxx:
+      return CL_CXX;
+    case clk_objcxx:
+      return CL_ObjCXX;
+    case clk_cxx2:
+      return CL_CXX2;
+    default:
+      gcc_unreachable ();
+    }
 }
 
 /* Diagnostic finalizer for C/C++/Objective-C/Objective-C++.  */
@@ -784,6 +796,13 @@ c_common_handle_option (size_t scode, const char *arg, HOST_WIDE_INT value,
                                  scode, arg, value,
                                  c_family_lang_mask, kind,
                                  loc, handlers, global_dc);
+      break;
+
+    case clk_cxx2:
+      CXX2_handle_option_auto (&global_options, &global_options_set,
+                               scode, arg, value,
+                               c_family_lang_mask, kind,
+                               loc, handlers, global_dc);
       break;
 
     default:

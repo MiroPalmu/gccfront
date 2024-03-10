@@ -33,6 +33,9 @@ C++
 Language
 ObjC++
 
+Language
+C++2
+
 -all-warnings
 C ObjC C++ ObjC++ Warning Alias(Wall)
 

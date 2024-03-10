@@ -531,10 +531,11 @@ extern GTY(()) tree c_global_trees[CTI_MAX];
 
 enum c_language_kind
 {
-  clk_c		= 0,		/* C90, C94, C99, C11 or C23 */
-  clk_objc	= 1,		/* clk_c with ObjC features.  */
-  clk_cxx	= 2,		/* ANSI/ISO C++ */
-  clk_objcxx	= 3		/* clk_cxx with ObjC features.  */
+  clk_c		 = 0,     /* C90, C94, C99, C11 or C23 */
+  clk_objc	 = 1,     /* clk_c with ObjC features.  */
+  clk_cxx	 = 2,     /* ANSI/ISO C++ */
+  clk_objcxx = 3,     /* clk_cxx with ObjC features.  */
+  clk_cxx2	 = 4 + 2  /* clk_cxx with new syntax  */
 };
 
 /* To test for a specific language use c_language, defined by each

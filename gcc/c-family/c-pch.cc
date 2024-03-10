@@ -72,6 +72,7 @@ static const char *get_ident (void);
 static const char *
 get_ident (void)
 {
+  gcc_assert (c_language != clk_cxx2);
   static char result[IDENT_LENGTH];
   static const char templ[] = "gpch.014";
   static const char c_language_chars[] = "Co+O";

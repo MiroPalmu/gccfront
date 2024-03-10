@@ -1,0 +1,207 @@
+# Top level -*- makefile -*- fragment for GNU C++2.
+#   Copyright (C) 1994-2024 Free Software Foundation, Inc.
+
+#This file is part of GCC.
+
+#GCC is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 3, or (at your option)
+#any later version.
+
+#GCC is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with GCC; see the file COPYING3.  If not see
+# <http://www.gnu.org/licenses/>.
+
+# This file provides the language dependent support in the main Makefile.
+# Each language makefile fragment must provide the following targets:
+#
+# foo.all.cross, foo.start.encap, foo.rest.encap,
+# foo.install-common, foo.install-man, foo.install-info, foo.install-pdf,
+# foo.install-html, foo.info, foo.dvi, foo.pdf, foo.html, foo.uninstall,
+# foo.mostlyclean, foo.clean, foo.distclean,
+# foo.maintainer-clean, foo.stage1, foo.stage2, foo.stage3, foo.stage4
+#
+# where `foo' is the name of the language.
+#
+# It should also provide rules for:
+#
+# - making any compiler driver (eg: g++2)
+# - the compiler proper (eg: cc1plus2)
+# - define the names for selecting the language in LANGUAGES.
+
+# In this makefile
+#   - GXX2_D referes to g++2 driver
+#   - CXX2 to the compiler proper (cc1plus2).
+
+GXX2_D_INSTALL_NAME := $(shell echo g++2 |sed '$(program_transform_name)')
+GXX2_D_TARGET_INSTALL_NAME := $(target_noncanonical)-$(shell echo g++2|sed '$(program_transform_name)')
+
+# Define the names for selecting c++2 in LANGUAGES.
+c++2: cc1plus2$(exeext)
+c++2.serial: cc1plus2$(exeext)
+
+# Tell GNU make to ignore these if they exist.
+.PHONY: c++2
+
+# Driver:
+
+GXX2_D_OBJS = \
+   $(GCC_OBJS) \
+   cp2/g++2spec.o \
+   $(END)
+
+g++2$(exeext): $(GXX2_D_OBJS) $(EXTRA_GCC_OBJS) libcommon-target.a $(LIBDEPS)
+	+$(LINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) -o $@ \
+	  $(GXX2_D_OBJS) $(EXTRA_GCC_OBJS) libcommon-target.a \
+	  $(EXTRA_GCC_LIBS) $(LIBS)
+
+# The compiler proper:
+
+# Use maximal warnings for this front end.  Also, make C++
+# headers accessible.
+#
+# Feels weird to give -I* flag in cp2-warn (see: gcc/Makefile.in)
+# but this is how objcp does it.
+cp2-warn = $(STRICT_WARN) -I$(srcdir)/cp -std=c++23
+
+CXX2_OBJS = cp2/cp2-lang.o c-family/stub-objc.o  $(CXX_AND_OBJCXX_OBJS)
+
+# Mandatory lang_OBJS containing all language spesific objectfiles.
+c++2_OBJS = $(CXX2_OBJS) cc1plus2-checksum.o cp2/g++2spec.o
+
+# compute checksum over all object files and the options
+# re-use the checksum from the prev-final stage so it passes
+# the bootstrap comparison and allows comparing of the cc1 binary
+cc1plus2-checksum.cc : build/genchecksum$(build_exeext) checksum-options \
+	$(CXX2_OBJS) $(BACKEND) $(CODYLIB) $(LIBDEPS) 
+	if [ -f ../stage_final ] \
+	   && cmp -s ../stage_current ../stage_final \
+	   && [ -f ../prev-gcc/$@ ]; then \
+	  cp ../prev-gcc/$@ $@; \
+	else \
+	  build/genchecksum$(build_exeext) $(CXX2_OBJS) $(BACKEND) $(CODYLIB) $(LIBDEPS) \
+                     checksum-options > cc1plus2-checksum.cc.tmp &&	   \
+	  $(srcdir)/../move-if-change $@.tmp $@; \
+	fi
+
+cc1plus2$(exeext): $(CXX2_OBJS) cc1plus2-checksum.o $(BACKEND) $(CODYLIB) $(LIBDEPS) $(c++2.prev)
+	@$(call LINK_PROGRESS,$(INDEX.c++2),start)
+	+$(LLINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) -o $@ \
+		$(CXX2_OBJS) cc1plus2-checksum.o $(BACKEND) $(CODYLIB) $(LIBS) $(BACKENDLIBS)
+    @$(call LINK_PROGRESS,$(INDEX.c++2),end)
+	echo END
+
+# Build hooks:
+
+# Copies its dependencies into the source directory. This generally should be used for generated files
+# such as Bison output files which are not version-controlled, but should be included in any release
+# tarballs. This target will be executed during a bootstrap if ‘--enable-generated-files-in-srcdir’
+# was specified as a configure option.
+c++2.srcextra:
+
+c++2.all.cross: g++2$(exeext)
+c++2.start.encap: g++2$(exeext)
+c++2.rest.encap:
+
+# Build generated man pages for the front end from Texinfo manuals (see Man Page Generation), in the
+# build directory. This target is only called if the necessary tools are available, but should ignore
+# errors so as not to stop the build if errors occur; man pages are optional and the tools involved
+# may be installed in a broken way.
+c++2.man:
+
+# Copies its dependencies into the source directory. These targets will be executed during a bootstrap
+# if ‘--enable-generated-files-in-srcdir’ was specified as a configure option.
+c++2.srcman:
+
+# Clean hooks:
+c++2.mostlyclean:
+	-rm -f cp2/*$(objext)
+	-rm -f cp2/*$(coverageexts)
+	-rm -f g++2$(exeext) cc1plus2$(exeext)
+c++2.clean: c++2.mostlyclean
+c++2.distclean:
+	-rm -f cp2/config.status cp2/Makefile
+c++2.maintainer-clean:
+
+
+# Rust had tags target, I don't know what it is for:
+#
+# Builds an etags TAGS file in the language subdirectory in the source tree.
+# TODO: add more directories if I add more
+# rust.tags: force
+#     cd $(srcdir)/rust; \
+#     etags -o TAGS.sub *.y *.l *.cc *.h ast/*.h ast/*.cc lex/*.h lex/*.cc parse/*.h parse/*.cc; \
+#     etags --include TAGS.sub --include ../TAGS.sub
+
+
+# Build documentation hooks:
+
+# Build info documentation for the front end, in the build directory. This target is only called by
+# ‘make bootstrap’ if a suitable version of makeinfo is available, so does not need to check for this,
+# and should fail if an error occurs.
+c++2.info:
+c++2.srcinfo:
+
+# Build DVI documentation for the front end, in the build directory. This should be done using
+# $(TEXI2DVI), with appropriate -I arguments pointing to directories of included files.
+c++2.dvi:
+
+# Build PDF documentation for the front end, in the build directory. This should be done using
+# $(TEXI2PDF), with appropriate -I arguments pointing to directories of included files.
+c++2.pdf:
+
+# Build HTML documentation for the front end, in the build directory.
+c++2.html:
+
+# Install hooks:
+
+# Install everything that is part of the front end, apart from the compiler executables listed in
+# compilers in config-lang.in.
+c++2.install-common: installdirs
+    # rm potential driver present at install location.
+	-rm -f $(DESTDIR)$(bindir)/$(GXX2_D_INSTALL_NAME)$(exeext)
+    # Install the driver.
+	$(INSTALL_PROGRAM) g++2$(exeext) $(DESTDIR)$(bindir)/$(GXX2_D_INSTALL_NAME)$(exeext)
+    # rm potential target driver present at install location. 
+	rm -f $(DESTDIR)$(bindir)/$(GXX2_D_TARGET_INSTALL_NAME)$(exeext); \
+    # link target driver to the installed deriver.
+	( cd $(DESTDIR)$(bindir) && \
+      $(LN) $(GXX2_D_INSTALL_NAME)$(exeext) $(GXX2_D_TARGET_INSTALL_NAME)$(exeext) ); \
+
+# Uninstall files installed by installing the compiler. This is currently documented not to be
+# supported, so the hook need not do anything.
+c++2.uninstall:
+#	-rm -rf $(DESTDIR)/$(bindir)/$(GXX2_D_INSTALL_NAME)$(exeext)
+	-rm -f g++2$(exeext) cc1plus2$(exeext)
+	-rm -f $(CXX2_OBJS)
+# ^those two are a maybe
+#
+# Install headers needed for plugins:
+c++2.install-plugin:
+
+c++2.install-man:
+c++2.install-info:
+c++2.install-pdf:
+c++2.install-html:
+
+# Selftest:
+selftest-c++2:
+
+# Used for handling bootstrap
+c++2.stage1: stage1-start
+	-mv cp2/*$(objext) stage1/cp2
+c++2.stage2: stage2-start
+	-mv cp2/*$(objext) stage2/cp2
+c++2.stage3: stage3-start
+	-mv cp2/*$(objext) stage3/cp2
+c++2.stage4: stage4-start
+	-mv cp2/*$(objext) stage4/cp2
+c++2.stageprofile: stageprofile-start
+	-mv cp2/*$(objext) stageprofile/cp2
+c++2.stagefeedback: stagefeedback-start
+	-mv cp2/*$(objext) stagefeedback/cp2

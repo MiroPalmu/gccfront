@@ -1,0 +1,238 @@
+# Language hooks defined in cp/cp-lang.cc
+
+[x] defined also in cp/cp-objcp-common.cc
+
+[ ] LANG_HOOKS_NAME                                 "GNU C++"
+[ ] LANG_HOOKS_INIT                                 cxx_init
+[ ] LANG_HOOKS_CLASSIFY_RECORD                      cp_classify_record
+[ ] LANG_HOOKS_GENERIC_TYPE_P                       class_tmpl_impl_spec_p
+[ ] LANG_HOOKS_GET_INNERMOST_GENERIC_PARMS          get_primary_template_innermost_parameters
+[ ] LANG_HOOKS_GET_INNERMOST_GENERIC_ARGS           get_template_innermost_arguments_folded
+[ ] LANG_HOOKS_FUNCTION_PARAMETER_PACK_P            function_parameter_pack_p
+[ ] LANG_HOOKS_GET_ARGUMENT_PACK_ELEMS              get_template_argument_pack_elems_folded
+[ ] LANG_HOOKS_GENERIC_GENERIC_PARAMETER_DECL_P     template_template_parameter_p
+[ ] LANG_HOOKS_FUNCTION_PARM_EXPANDED_FROM_PACK_P   function_parameter_expanded_from_pack_p
+[ ] LANG_HOOKS_GET_GENERIC_FUNCTION_DECL            get_function_template_decl
+[ ] LANG_HOOKS_DWARF_NAME                           cxx_dwarf_name
+[ ] LANG_HOOKS_INIT_TS                              cp_common_init_ts
+[ ] LANG_HOOKS_EH_PERSONALITY                       cp_eh_personality
+[ ] LANG_HOOKS_EH_RUNTIME_TYPE                      build_eh_type_type
+[ ] LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE            cxx_enum_underlying_base_type
+[ ] LANG_HOOKS_PREPROCESS_MAIN_FILE                 module_begin_main_file
+[ ] LANG_HOOKS_PREPROCESS_OPTIONS                   module_preprocess_options
+[ ] LANG_HOOKS_PREPROCESS_TOKEN                     module_token_pre
+[ ] LANG_HOOKS_GET_SUBSTRING_LOCATION               c_get_substring_location
+[ ] LANG_HOOKS_OMP_GET_DECL_INIT                    cxx_omp_get_decl_init
+[ ] LANG_HOOKS_OMP_FINISH_DECL_INITS                cxx_omp_finish_decl_inits
+[ ] LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE            cp_get_sarif_source_language
+
+#if CHECKING_P
+LANG_HOOKS_RUN_LANG_SELFTESTS selftest::run_cp_tests
+#endif /* #if CHECKING_P */
+
+# Language hooks defined in objcp/objcp-lang.cc
+
+[x] defined also in cp/cp-objcp-common.cc
+
+[ ] LANG_HOOKS_NAME                                 "GNU Objective-C++"
+[ ] LANG_HOOKS_INIT                                 objc_init
+[x] LANG_HOOKS_GIMPLIFY_EXPR                        objc_gimplify_expr
+[ ] LANG_HOOKS_INIT_TS                              objcxx_init_ts
+
+# Common language hooks
+
+Following language hooks are shared between C++ and OBJC++:
+
+LANG_HOOKS_FREE_LANG_DATA                           cp_free_lang_data
+LANG_HOOKS_TREE_SIZE                                cp_tree_size
+LANG_HOOKS_FINISH                                   cxx_finish
+LANG_HOOKS_CLEAR_BINDING_STACK                      pop_everything
+LANG_HOOKS_OPTION_LANG_MASK                         c_common_option_lang_mask
+LANG_HOOKS_COMPLAIN_WRONG_LANG_P                    c_common_complain_wrong_lang_p
+LANG_HOOKS_INIT_OPTIONS_STRUCT                      c_common_init_options_struct
+LANG_HOOKS_INIT_OPTIONS                             c_common_init_options
+LANG_HOOKS_INITIALIZE_DIAGNOSTICS                   cxx_initialize_diagnostics
+LANG_HOOKS_REGISTER_DUMPS                           cp_register_dumps
+LANG_HOOKS_HANDLE_OPTION                            cp_handle_option
+LANG_HOOKS_HANDLE_FILENAME                          c_common_handle_filename
+LANG_HOOKS_POST_OPTIONS                             c_common_post_options
+LANG_HOOKS_GET_ALIAS_SET                            cxx_get_alias_set
+LANG_HOOKS_PARSE_FILE                               c_common_parse_file
+LANG_HOOKS_DUP_LANG_SPECIFIC_DECL                   cxx_dup_lang_specific_decl
+LANG_HOOKS_SET_DECL_ASSEMBLER_NAME                  mangle_decl
+LANG_HOOKS_OVERWRITE_DECL_ASSEMBLER_NAME            overwrite_mangling
+LANG_HOOKS_PRINT_STATISTICS                         cxx_print_statistics
+LANG_HOOKS_PRINT_XNODE                              cxx_print_xnode
+LANG_HOOKS_DECL_PRINTABLE_NAME                      cxx_printable_name
+LANG_HOOKS_PRINT_DECL                               cxx_print_decl
+LANG_HOOKS_PRINT_TYPE                               cxx_print_type
+LANG_HOOKS_PRINT_IDENTIFIER                         cxx_print_identifier
+LANG_HOOKS_TYPES_COMPATIBLE_P                       cxx_types_compatible_p
+LANG_HOOKS_PRINT_ERROR_FUNCTION                     cxx_print_error_function
+LANG_HOOKS_WARN_UNUSED_GLOBAL_DECL                  cxx_warn_unused_global_decl
+LANG_HOOKS_POST_COMPILATION_PARSING_CLEANUPS        cxx_post_compilation_parsing_cleanups
+LANG_HOOKS_BUILTIN_FUNCTION                         cxx_builtin_function
+LANG_HOOKS_BUILTIN_FUNCTION_EXT_SCOPE               cxx_builtin_function_ext_scope
+LANG_HOOKS_SIMULATE_BUILTIN_FUNCTION_DECL           cxx_simulate_builtin_function_decl
+LANG_HOOKS_TYPE_HASH_EQ                             cxx_type_hash_eq
+LANG_HOOKS_COPY_LANG_QUALIFIERS                     cxx_copy_lang_qualifiers
+LANG_HOOKS_MISSING_NORETURN_OK_P                    cp_missing_noreturn_ok_p
+LANG_HOOKS_BLOCK_MAY_FALLTHRU                       cxx_block_may_fallthru
+LANG_HOOKS_EMITS_BEGIN_STMT                         true
+LANG_HOOKS_FINALIZE_EARLY_DEBUG                     c_common_finalize_early_debug
+LANG_HOOKS_ATTRIBUTE_TABLE                          cp_objcp_attribute_table
+LANG_HOOKS_TREE_INLINING_VAR_MOD_TYPE_P             cp_var_mod_type_p
+LANG_HOOKS_TREE_DUMP_DUMP_TREE_FN                   cp_dump_tree
+LANG_HOOKS_TREE_DUMP_TYPE_QUALS_FN                  cp_type_quals
+LANG_HOOKS_MAKE_TYPE                                cxx_make_type_hook
+LANG_HOOKS_SIMULATE_ENUM_DECL                       cxx_simulate_enum_decl
+LANG_HOOKS_SIMULATE_RECORD_DECL                     cxx_simulate_record_decl
+LANG_HOOKS_TYPE_FOR_MODE                            c_common_type_for_mode
+LANG_HOOKS_TYPE_FOR_SIZE                            c_common_type_for_size
+LANG_HOOKS_INCOMPLETE_TYPE_ERROR                    cxx_incomplete_type_error
+LANG_HOOKS_TYPE_PROMOTES_TO                         cxx_type_promotes_to
+LANG_HOOKS_REGISTER_BUILTIN_TYPE                    c_register_builtin_type
+LANG_HOOKS_RECONSTRUCT_COMPLEX_TYPE                 cp_reconstruct_complex_type
+LANG_HOOKS_GET_DEBUG_TYPE                           cp_get_debug_type
+LANG_HOOKS_TO_TARGET_CHARSET                        c_common_to_target_charset
+LANG_HOOKS_GIMPLIFY_EXPR                            cp_gimplify_expr
+LANG_HOOKS_DECL_DWARF_ATTRIBUTE                     cp_decl_dwarf_attribute
+LANG_HOOKS_TYPE_DWARF_ATTRIBUTE                     cp_type_dwarf_attribute
+LANG_HOOKS_UNIT_SIZE_WITHOUT_REUSABLE_PADDING       cp_unit_size_without_reusable_padding
+LANG_HOOKS_CLASSTYPE_AS_BASE                        cp_classtype_as_base
+LANG_HOOKS_OMP_PREDETERMINED_SHARING                cxx_omp_predetermined_sharing
+LANG_HOOKS_OMP_PREDETERMINED_MAPPING                cxx_omp_predetermined_mapping
+LANG_HOOKS_OMP_CLAUSE_DEFAULT_CTOR                  cxx_omp_clause_default_ctor
+LANG_HOOKS_OMP_CLAUSE_COPY_CTOR                     cxx_omp_clause_copy_ctor
+LANG_HOOKS_OMP_CLAUSE_ASSIGN_OP                     cxx_omp_clause_assign_op
+LANG_HOOKS_OMP_CLAUSE_DTOR                          cxx_omp_clause_dtor
+LANG_HOOKS_OMP_FINISH_CLAUSE                        cxx_omp_finish_clause
+LANG_HOOKS_OMP_PRIVATIZE_BY_REFERENCE               cxx_omp_privatize_by_reference
+LANG_HOOKS_OMP_DISREGARD_VALUE_EXPR                 cxx_omp_disregard_value_expr
+LANG_HOOKS_EH_USE_CXA_END_CLEANUP                   true
+LANG_HOOKS_EH_PROTECT_CLEANUP_ACTIONS               cp_protect_cleanup_actions
+LANG_HOOKS_GETDECLS                                 cp_get_global_decls
+LANG_HOOKS_PUSHDECL                                 cp_pushdecl
+
+# Language hooks from tiny for C++2
+
+[x][ ][ ] defined also in cp/cp-lang.cc
+[ ][x][ ] defined also in objccp/objcp-lang.cc
+[ ][ ][x] defined also in cp/cp-objcp-common.cc
+
+[x][x][ ] LANG_HOOKS_NAME                           "GNU C++2"
+[x][x][ ] LANG_HOOKS_INIT                           cxx2_langhook_init
+[ ][ ][x] LANG_HOOKS_PARSE_FILE                     cxx2_langhook_parse_file
+[ ][ ][x] LANG_HOOKS_TYPE_FOR_MODE                  cxx2_langhook_type_for_mode
+[ ][ ][x] LANG_HOOKS_TYPE_FOR_SIZE                  cxx2_langhook_type_for_size
+[ ][ ][x] LANG_HOOKS_BUILTIN_FUNCTION               cxx2_langhook_builtin_function
+[ ][ ][ ] LANG_HOOKS_GLOBAL_BINDINGS_P              cxx2_langhook_global_bindings_p
+[ ][ ][x] LANG_HOOKS_PUSHDECL                       cxx2_langhook_pushdecl
+[ ][ ][x] LANG_HOOKS_GETDECLS                       cxx2_langhook_getdecls
+
+# Language hooks in C++ but not in hooks from tiny for C++
+
+LANG_HOOKS_CLASSIFY_RECORD                          cp_classify_record
+LANG_HOOKS_GENERIC_TYPE_P                           class_tmpl_impl_spec_p
+LANG_HOOKS_GET_INNERMOST_GENERIC_PARMS              get_primary_template_innermost_parameters
+LANG_HOOKS_GET_INNERMOST_GENERIC_ARGS               get_template_innermost_arguments_folded
+LANG_HOOKS_FUNCTION_PARAMETER_PACK_P                function_parameter_pack_p
+LANG_HOOKS_GET_ARGUMENT_PACK_ELEMS                  get_template_argument_pack_elems_folded
+LANG_HOOKS_GENERIC_GENERIC_PARAMETER_DECL_P         template_template_parameter_p
+LANG_HOOKS_FUNCTION_PARM_EXPANDED_FROM_PACK_P       function_parameter_expanded_from_pack_p
+LANG_HOOKS_GET_GENERIC_FUNCTION_DECL                get_function_template_decl
+LANG_HOOKS_DWARF_NAME                               cxx_dwarf_name
+LANG_HOOKS_INIT_TS                                  cp_common_init_ts
+LANG_HOOKS_EH_PERSONALITY                           cp_eh_personality
+LANG_HOOKS_EH_RUNTIME_TYPE                          build_eh_type_type
+LANG_HOOKS_ENUM_UNDERLYING_BASE_TYPE                cxx_enum_underlying_base_type
+LANG_HOOKS_PREPROCESS_MAIN_FILE                     module_begin_main_file
+LANG_HOOKS_PREPROCESS_OPTIONS                       module_preprocess_options
+LANG_HOOKS_PREPROCESS_TOKEN                         module_token_pre
+LANG_HOOKS_GET_SUBSTRING_LOCATION                   c_get_substring_location
+LANG_HOOKS_OMP_GET_DECL_INIT                        cxx_omp_get_decl_init
+LANG_HOOKS_OMP_FINISH_DECL_INITS                    cxx_omp_finish_decl_inits
+LANG_HOOKS_GET_SARIF_SOURCE_LANGUAGE                cp_get_sarif_source_language
+
+# Notes about why some cp-objcp-common.h hooks are **not** needed
+
+LANG_HOOKS_FINISH                                   cxx_finish
+
+    cxx_finish just calls c_common_finish which, among other things,
+        - generating header dependency files (-M and friends)
+        - finalizes CPP (C preprocessor)
+
+    g++2 does not want CPP.
+
+LANG_HOOKS_CLEAR_BINDING_STACK                      pop_everything
+
+    In ChnageLog-2008:
+
+	    * langhooks-def.h (LANG_HOOKS_CLEAR_BINDING_STACK): Delete.
+
+    So it is unused?
+
+LANG_HOOKS_INIT_OPTIONS                             c_common_init_options
+
+    c_common_init_options will:
+
+        - initialize CPP
+        - set default C++ standard 
+        - global_dc->m_source_printing.colorize_source_p = true;
+
+    g++2 probably only needs to set default C++ standard.
+
+    global_dc->m_source_printing.colorize_source_p needs more research.
+
+| LANG_HOOKS_INITIALIZE_DIAGNOSTICS                   cxx_initialize_diagnostics
+|     
+|     Initializes c++ spesific pretty printer. Not sure if needed.
+
+LANG_HOOKS_HANDLE_FILENAME                          c_common_handle_filename
+
+
+    In ChangeLog-2003:
+
+	    * c-opts.c (in_fnames, num_in_fnames):  Moved to opts.c.
+	    (c_common_handle_filename):  Replaced by add_input_filename.
+	    * c-common.h (in_fnames, num_in_fnames, c_common_handle_filename):
+	    Remove.
+	    * langhooks.h (struct lang_hooks):  Remove handle_filename hook.
+	    * langhooks-def.h (LANG_HOOKS_HANDLE_FILENAME):  Remove macro.
+	    (LANG_HOOKS_INITIALIZER):  Remove use of LANG_HOOKS_HANDLE_FILENAME.
+	    * c-lang.c (LANG_HOOKS_HANDLE_FILENAME):  Remove macro.
+
+    Unused.
+
+LANG_HOOKS_PARSE_FILE                               c_common_parse_file
+
+    Main beef.
+
+LANG_HOOKS_POST_COMPILATION_PARSING_CLEANUPS        cxx_post_compilation_parsing_cleanups
+
+    From langhooks.h:
+
+    > This is currently only needed for the C++ parser,
+    > which hopefully can be cleaned up so this hook is no longer necessary.
+
+    cxx_post_compilation_parsing_cleanups will:
+        - verifies some vtable stuff
+        - input_location = locus_at_end_of_parsing;
+        - if (flag_checking) validate_conversion_obstack ();
+
+    These are probably stuff that g++2 does not need.
+
+    Default POST_COMPILATION_PARSING_CLEANUPS is NULL.
+    
+# Notes about why some cp-lang.h hooks are borrowed needed
+
+Hooks not listed here from cp-lang.h are not needed.
+
+LANG_HOOKS_CLASSIFY_RECORD                          cp_classify_record
+
+    Classifies c++ classes and struct to either RECORD_IS_CLASS
+    or RECORD_IS_STRUCT.
+
+LANG_HOOKS_DWARF_NAME                               cxx_dwarf_name
+
+    We want same dwarf as for C++.

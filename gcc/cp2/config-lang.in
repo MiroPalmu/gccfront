@@ -1,0 +1,57 @@
+# Top level configure fragment for GNU C++.
+#   Copyright (C) 1994-2024 Free Software Foundation, Inc.
+
+#This file is part of GCC.
+
+#GCC is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 3, or (at your option)
+#any later version.
+
+#GCC is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with GCC; see the file COPYING3.  If not see
+# <http://www.gnu.org/licenses/>.
+
+language="c++2"
+lang_requires="c++"
+subdir_requires="cp"
+# target_libs=""
+# lang_dirs=""
+build_by_default="no"
+
+compilers="cc1plus2\$(exeext)"
+
+# When you add to this gtfiles list a header which comes from a
+# directory belonging to another language (ie, C++ or ObjC), you need
+# to also edit gengtype.cc adding a special rule for the header to
+# avoid having the GC stuff from that header being added to gtype-cp.h
+# or gtype-objc.h.
+#
+# cp2 does not have any of these special headers at the moment,
+# but when adding the first one look examples from objc[p].
+
+# Get the C++ FE's gtfiles list.  Do this in a subshell, so we can
+# extract exactly the gtfiles var, but munge cp-lang.cc into cp2-lang.cc.
+gtfiles="$(. $srcdir/cp/config-lang.in ; \
+  echo $gtfiles | sed 's+/cp/cp-lang.cc +/cp2/cp2-lang.cc +')"
+
+# At the moment no additions to the list, but when adding the one
+# look examples from objc[p].
+#
+# Now add our special bits to it.  Please keep this list sorted.
+gtfiles="$gtfiles \
+"
+#\$(srcdir)/objc/objc-act.h \
+#\$(srcdir)/objc/objc-map.h \
+#\$(srcdir)/objc/objc-act.cc \
+#\$(srcdir)/objc/objc-gnu-runtime-abi-01.cc \
+#\$(srcdir)/objc/objc-next-runtime-abi-01.cc \
+#\$(srcdir)/objc/objc-next-runtime-abi-02.cc \
+#\$(srcdir)/objc/objc-runtime-shared-support.cc \
+#"
+

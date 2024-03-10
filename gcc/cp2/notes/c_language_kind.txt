@@ -1,0 +1,39 @@
+c_language_kind:
+
+  clk_c		    = 0 		/* C90, C94, C99, C11 or C23 */
+  clk_objc	    = 1 		/* clk_c with ObjC features.  */
+  clk_cxx	    = 2 		/* ANSI/ISO C++ */
+  clk_objcxx	= 3     	/* clk_cxx with ObjC features.  */
+  clk_cxx2	    = 4		    /* clk_cxx with new syntax  */
+
+In bits:
+
+clk_c           = 0000
+clk_objc        = 0001
+clk_cxx         = 0010
+clk_objcxx      = 0011
+clk_cxx2        = 0110
+
+/* To test for a specific language use c_language, defined by each
+   front end.  For "ObjC features" or "not C++" use the macros.  */
+
+#define c_dialect_cxx()		((c_language & clk_cxx) != 0)
+#define c_dialect_objc()	((c_language & clk_objc) != 0)
+
+Truth tables for c_dialect_[cxx|objc]():
+
+c_dialect_cxx:
+
+clk_c        (0000 & 0010 != 0) => (0000 != 0) => false
+clk_objc     (0001 & 0010 != 0) => (0000 != 0) => false
+clk_cxx      (0010 & 0010 != 0) => (0010 != 0) => true
+clk_objcxx   (0011 & 0010 != 0) => (0010 != 0) => true
+clk_cxx2     (0110 & 0010 != 0) => (0010 != 0) => true
+
+c_dialect_objc():
+clk_c        (0000 & 0001 != 0) => (0000 != 0) => false
+clk_objc     (0001 & 0001 != 0) => (0001 != 0) => true
+clk_cxx      (0010 & 0001 != 0) => (0000 != 0) => false
+clk_objcxx   (0011 & 0001 != 0) => (0001 != 0) => true
+clk_cxx2     (0110 & 0001 != 0) => (0000 != 0) => false
+
