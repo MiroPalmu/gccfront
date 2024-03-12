@@ -1458,15 +1458,32 @@ esac
 
 # When bootstrapping with GCC, build stage 1 in C++11 mode to ensure that a
 # C++11 compiler can still start the bootstrap.  Otherwise, if building GCC,
-# require C++11 (or higher).
-if test "$enable_bootstrap:$GXX" = "yes:yes"; then
-  CXX="$CXX -std=c++11"
-elif test "$have_compiler" = yes; then
-  AX_CXX_COMPILE_STDCXX(11)
+# require C++11 (or higher)...
+#
+# ...unless some --enable-cxx[version] has been given, which forces usage
+# of spesific one without checking with autoconf, if it is supported.
+cxx_std="default"
 
-  if test "${build}" != "${host}"; then
-    AX_CXX_COMPILE_STDCXX(11, [], [], [_FOR_BUILD])
+AC_ARG_ENABLE(cxx20,
+[AS_HELP_STRING([--enable-cxx20],
+                [build gcc in C++20 mode.
+                 Disables autoconf checks for C++ standard support.])],
+[cxx_std="20"],
+[])
+
+if test "$cxx_std" = "default"; then
+  if test "$enable_bootstrap:$GXX" = "yes:yes"; then
+    CXX="$CXX -std=c++11"
+  elif test "$have_compiler:$check_cxx_std" = "yes:yes"; then
+    AX_CXX_COMPILE_STDCXX(11)
+
+    if test "${build}" != "${host}"; then
+      AX_CXX_COMPILE_STDCXX(11, [], [], [_FOR_BUILD])
+    fi
   fi
+else
+  echo "Building with -std=c++$cxx_std."
+  CXX="$CXX -std=c++$cxx_std"
 fi
 
 AC_ARG_ENABLE([pgo-build],

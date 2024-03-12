@@ -818,6 +818,7 @@ enable_libgm2
 enable_libssp
 enable_libstdcxx
 enable_bootstrap
+enable_cxx20
 enable_pgo_build
 with_mpc
 with_mpc_include
@@ -1563,6 +1564,8 @@ Optional Features:
   --enable-libssp         build libssp directory
   --disable-libstdcxx     do not build libstdc++-v3 directory
   --enable-bootstrap      enable bootstrapping [yes if native build]
+  --enable-cxx20          build gcc in C++20 mode. Disables autoconf checks
+                          for C++ standard support.
   --enable-pgo-build[=lto]
                           enable the PGO build
   --disable-isl-version-check
@@ -5866,11 +5869,23 @@ esac
 
 # When bootstrapping with GCC, build stage 1 in C++11 mode to ensure that a
 # C++11 compiler can still start the bootstrap.  Otherwise, if building GCC,
-# require C++11 (or higher).
-if test "$enable_bootstrap:$GXX" = "yes:yes"; then
-  CXX="$CXX -std=c++11"
-elif test "$have_compiler" = yes; then
-    ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
+# require C++11 (or higher)...
+#
+# ...unless some --enable-cxx[version] has been given, which forces usage
+# of spesific one without checking with autoconf, if it is supported.
+cxx_std="default"
+
+# Check whether --enable-cxx20 was given.
+if test "${enable_cxx20+set}" = set; then :
+  enableval=$enable_cxx20; cxx_std="20"
+fi
+
+
+if test "$cxx_std" = "default"; then
+  if test "$enable_bootstrap:$GXX" = "yes:yes"; then
+    CXX="$CXX -std=c++11"
+  elif test "$have_compiler:$check_cxx_std" = "yes:yes"; then
+      ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -6863,8 +6878,8 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
 
 
 
-  if test "${build}" != "${host}"; then
-      ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
+    if test "${build}" != "${host}"; then
+        ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -7866,7 +7881,11 @@ $as_echo "#define HAVE_CXX11_FOR_BUILD 1" >>confdefs.h
   fi
 
 
+    fi
   fi
+else
+  echo "Building with -std=c++$cxx_std."
+  CXX="$CXX -std=c++$cxx_std"
 fi
 
 # Check whether --enable-pgo-build was given.

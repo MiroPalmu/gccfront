@@ -201,6 +201,10 @@ extern int fprintf_unlocked (FILE *, const char *, ...);
 #ifdef INCLUDE_STRING
 # include <string>
 #endif
+
+#ifdef INCLUDE_MEMORY
+# include <memory>
+#endif
 #endif
 
 /* There are an extraordinary number of issues with <ctype.h>.
