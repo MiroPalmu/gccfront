@@ -47,11 +47,11 @@ namespace Detail  {
 
 // C++11 doesn't have utf8 character literals :(
 
-template<unsigned I>
-constexpr char S2C (char const (&s)[I])
+template<unsigned I, typename Char>
+constexpr char S2C (Char const (&s)[I])
 {
   static_assert (I == 2, "only single octet strings may be converted");
-  return s[0];
+  return static_cast<char>(s[0]);
 }
 
 /// Internal buffering class.  Used to concatenate outgoing messages

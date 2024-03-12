@@ -31,32 +31,33 @@ else
   AC_MSG_RESULT([$CXX])
 fi)])
 
-AC_DEFUN([NMS_CXX_11],
-[AC_MSG_CHECKING([whether $CXX is for C++11])
+AC_DEFUN([NMS_CXX_CHECK_SUPPORT], [
+AC_MSG_CHECKING([whether $CXX is for at least C++11])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-[#if __cplusplus != 201103
-#error "C++11 is required"
+[#if __cplusplus < 201103
+#error "At least C++11 is required"
 #endif
 ]])],
 [AC_MSG_RESULT([yes])],
-[CXX_ORIG="$CXX"
-CXX="$CXX -std=c++11"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-[#if __cplusplus != 201103
-#error "C++11 is required"
-#endif
-]])],
-AC_MSG_RESULT([adding -std=c++11]),
-[CXX="$CXX_ORIG"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
-[#if __cplusplus > 201103
-#error "C++11 is required"
-#endif
-]])],
-AC_MSG_RESULT([> C++11]),
+[
 AC_MSG_RESULT([no])
-AC_MSG_ERROR([C++11 is required])]))
-unset CXX_ORIG])])
+AC_MSG_ERROR([At least C++11 is required])
+])
+
+AC_DEFINE([remove_char8_t_support], [no], [add -fno-char8_t])
+AC_SUBST([remove_char8_t_support])
+AC_MSG_CHECKING([whether $CXX has char8_t support])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+[#ifdef __cpp_char8_t
+#if __cpp_char8_t >= 201811L
+#error "char8_t support detected"
+#endif
+#endif
+]])],
+[AC_MSG_RESULT([no])],
+[AC_MSG_RESULT([yes, adding -fno-char8_t])
+remove_char8_t_support="yes"])
+])
 
 AC_DEFUN([NMS_ENABLE_EXCEPTIONS],
 [AC_ARG_ENABLE([exceptions],

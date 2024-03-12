@@ -23,6 +23,10 @@ CXXFLAGS := @CXXFLAGS@
 CXXINC := $(filter -I%,@CXX@)
 CXXOPTS := $(CXXFLAGS) @PICFLAG@
 
+ifeq (@remove_char8_t_support@,yes)
+override CXXOPTS += -fno-char8_t
+endif
+
 ifneq (@EXCEPTIONS@,yes)
 CXXOPTS += -fno-exceptions -fno-rtti
 endif

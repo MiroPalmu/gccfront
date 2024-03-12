@@ -24,3 +24,6 @@
 #undef _FORTIFY_SOURCE
 
 #define _GNU_SOURCE 1
+
+/* add -fno-char8_t */
+#undef remove_char8_t_support

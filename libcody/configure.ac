@@ -15,7 +15,7 @@ NMS_MAINTAINER_MODE
 NMS_CXX_COMPILER
 AC_LANG(C++)
 AC_PROG_CXX
-NMS_CXX_11
+NMS_CXX_CHECK_SUPPORT
 NMS_LINK_OPT([-Wl,--no-undefined])
 
 # Enable expensive internal checks
